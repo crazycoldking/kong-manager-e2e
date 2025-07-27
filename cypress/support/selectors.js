@@ -89,7 +89,7 @@ export const selectors = {
     hosts: '[data-testid="hosts"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper',
     tags: '[data-testid="tags"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper'
   },
-  routeListPage: {
+  routesPage: {
     routeName: 'b',
     hosts: '[data-testid="hosts"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper',
     tags: '[data-testid="tags"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper'

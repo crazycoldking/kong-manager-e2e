@@ -136,18 +136,18 @@ devices.forEach(device => {
     it('should verify the route is created in Routes page', () => {
       ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
       cy.get(selectors.layout.sidebarItemRoutes).click();
-      cy.get(selectors.routeListPage.routeName).should('have.text', 'test-route');
-      cy.get(selectors.routeListPage.hosts).should('have.text', 'test-service.com');
-      cy.get(selectors.routeListPage.tags).should('have.text', 'test-route-tag');
+      cy.get(selectors.routesPage.routeName).should('have.text', 'test-route');
+      cy.get(selectors.routesPage.hosts).should('have.text', 'test-service.com');
+      cy.get(selectors.routesPage.tags).should('have.text', 'test-route-tag');
 
-      cy.get(selectors.routeListPage.routeName).click();
+      cy.get(selectors.routesPage.routeName).click();
       cy.get(selectors.routeDetailPage.title).should('have.text', 'test-route');
     });
 
     it('should clean up the route', () => {
       ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
       cy.get(selectors.layout.sidebarItemRoutes).click();
-      cy.get(selectors.routeListPage.routeName).click();
+      cy.get(selectors.routesPage.routeName).click();
       cy.get(selectors.layout.headerActions).click();
       cy.get(selectors.layout.dangerEntityButton).click();
       cy.get(selectors.layout.confirmationInput).type('test-route');
