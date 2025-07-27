@@ -1,0 +1,18 @@
+{
+  "name": "kong-manager-e2e",
+  "version": "1.0.0",
+  "description": "Cypress E2E UI test suite for Kong Manager",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "test": "cypress run --reporter mochawesome",
+    "test:report": "npx mochawesome-merge > reports/mochawesome.json && npx marge reports/mochawesome.json"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0",
+    "dotenv": "^16.3.1",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0"
+  }
+}
