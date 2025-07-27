@@ -12,7 +12,6 @@ module.exports = defineConfig({
     video: true,
     screenshotOnRunFailure: true,
     setupNodeEvents(on, config) {
-      // 加载环境变量到Cypress
       config.env.ADMIN_USER = process.env.ADMIN_USER;
       config.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
       config.env.INVALID_USER = process.env.INVALID_USER;

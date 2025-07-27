@@ -1,10 +1,11 @@
 import { devices } from '../support/devices';
+import { selectors } from '../support/selectors';
 
 
 devices.forEach(device => {
   describe(`Workspace UI Test on ${device.name}`, () => {
     beforeEach(() => {
-      cy.visit(`http://localhost:8002/default/overview`);
+      cy.visit(`/default/overview`);
       cy.viewport(device.viewport.width, device.viewport.height);
     });
 
@@ -12,7 +13,7 @@ devices.forEach(device => {
     const ensureSidebarItemVisible = (itemSelector) => {
       cy.get('body').then($body => {
         if (device.viewport.width <= 1024) {
-          cy.get('.sidebar-menu-toggle').click();
+          cy.get(selectors.layout.sidebarMenuToggle).click();
         }
         cy.get(itemSelector).should('be.visible');
       });
@@ -22,87 +23,87 @@ devices.forEach(device => {
       cy.get('body').then($body => {
         if (device.viewport.width <= 1024) {
           // Tablet view: need to open sidebar first
-          cy.get('.sidebar-menu-toggle').click();
-          cy.get('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link').click();
-          cy.get('[data-testid="empty-state-action"]').click();
+          cy.get(selectors.layout.sidebarMenuToggle).click();
+          cy.get(selectors.layout.sidebarItemGatewayServices).click();
+          cy.get(selectors.layout.emptyStateAction).click();
         } else {
           // Desktop view: direct access
-          cy.get('[data-testid="action-button"]').click();
+          cy.get(selectors.layout.actionButton).click();
         }
       });
 
       // Common service creation steps
-      cy.get('[data-testid="gateway-service-url-input"]').type('http://test-service.com');
-      cy.get('[data-testid="gateway-service-name-input"]').clear().type('test-service');
-      cy.get('[data-testid="tags-collapse"] [data-testid="collapse-trigger-content"]').click();
-      cy.get('[data-testid="gateway-service-tags-input"]').type('test-tag');
-      cy.get('[data-testid="service-create-form-submit"]').click();
-      cy.get('.title').should('have.text', 'test-service').should('be.visible');
+      cy.get(selectors.serviceCreatePage.urlInput).type('http://test-service.com');
+      cy.get(selectors.serviceCreatePage.nameInput).clear().type('test-service');
+      cy.get(selectors.serviceCreatePage.tagsCollapseTrigger).click();
+      cy.get(selectors.serviceCreatePage.tagsInput).type('test-tag');
+      cy.get(selectors.serviceCreatePage.submitButton).click();
+      cy.get(selectors.serviceCreatePage.title).should('have.text', 'test-service').should('be.visible');
     });
 
 
     it('should verify the service is created', () => {
-      ensureSidebarItemVisible('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link');
-      cy.get('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link').click();
-      cy.get('[data-testid="test-service"] > [data-testid="name"] b').should('have.text', 'test-service');
-      cy.get('[data-testid="protocol"] > .cell-wrapper > .content-wrapper').should('have.text', 'http');
-      cy.get('[data-testid="host"] > .cell-wrapper > .content-wrapper').should('have.text', 'test-service.com');
-      cy.get('[data-testid="port"] > .cell-wrapper > .content-wrapper').should('have.text', '80');
-      cy.get('[data-testid="tags"] > .cell-wrapper > .content-wrapper').should('have.text', 'test-tag');
+      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
+      cy.get(selectors.layout.sidebarItemGatewayServices).click();
+      cy.get(selectors.serviceListPage.serviceNameLink).should('have.text', 'test-service');
+      cy.get(selectors.serviceListPage.protocol).should('have.text', 'http');
+      cy.get(selectors.serviceListPage.host).should('have.text', 'test-service.com');
+      cy.get(selectors.serviceListPage.port).should('have.text', '80');
+      cy.get(selectors.serviceListPage.tags).should('have.text', 'test-tag');
     });
 
     it('should create a route with metadata', () => {
       cy.get('body').then($body => {
         if (device.viewport.width <= 1024) {
           // Tablet view
-          cy.get('.sidebar-menu-toggle').click();
-          cy.get('[data-testid="sidebar-item-routes"] > .sidebar-item-link').click();
-          cy.get('[data-testid="empty-state-action"]').click();
+          cy.get(selectors.layout.sidebarMenuToggle).click();
+          cy.get(selectors.layout.sidebarItemRoutes).click();
+          cy.get(selectors.layout.emptyStateAction).click();
         } else {
           // Desktop view
-          cy.get('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link').click();
-          cy.get('[data-testid="test-service"] > [data-testid="name"] b').click();
+          cy.get(selectors.layout.sidebarItemGatewayServices).click();
+          cy.get(selectors.serviceListPage.serviceNameLink).click();
           cy.get('.alert-message > .k-button').click();
         }
       });
 
       // Common route creation steps
-      cy.get('[data-testid="route-form-name"]').type('test-route');
-      cy.get('[data-testid="route-form-tags"]').type('test-route-tag');
-      cy.get('[data-testid="route-form-paths-input-1"]').type('/test-route');
-      cy.get('[data-testid="route-form-hosts-input-1"]').type('test-service.com');
-      cy.get('.multiselect-icons-container').click();
-      cy.get('[data-testid="multiselect-item-GET"] > .multiselect-item-container > button > .multiselect-item-label').click();
+      cy.get(selectors.routeCreatePage.nameInput).type('test-route');
+      cy.get(selectors.routeCreatePage.tagsInput).type('test-route-tag');
+      cy.get(selectors.routeCreatePage.pathsInput).type('/test-route');
+      cy.get(selectors.routeCreatePage.hostsInput).type('test-service.com');
+      cy.get(selectors.routeCreatePage.methodsMultiselect).click();
+      cy.get(selectors.routeCreatePage.getMethodItem).click();
       cy.get('body').click();
-      cy.get('[data-testid="route-create-form-submit"]').click();
+      cy.get(selectors.routeCreatePage.submitButton).click();
     });
 
     it('should verify the route is created', () => {
-      ensureSidebarItemVisible('[data-testid="sidebar-item-routes"] > .sidebar-item-link');
-      cy.get('[data-testid="sidebar-item-routes"] > .sidebar-item-link').click();
-      cy.get('b').should('have.text', 'test-route');
-      cy.get('[data-testid="hosts"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper').should('have.text', 'test-service.com');
-      cy.get('[data-testid="tags"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper').should('have.text', 'test-route-tag');
+      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      cy.get(selectors.layout.sidebarItemRoutes).click();
+      cy.get(selectors.routeListPage.routeName).should('have.text', 'test-route');
+      cy.get(selectors.routeListPage.hosts).should('have.text', 'test-service.com');
+      cy.get(selectors.routeListPage.tags).should('have.text', 'test-route-tag');
     });
 
     it('should clean up the route', () => {
-      ensureSidebarItemVisible('[data-testid="sidebar-item-routes"] > .sidebar-item-link');
-      cy.get('[data-testid="sidebar-item-routes"] > .sidebar-item-link').click();
-      cy.get('b').click();
-      cy.get('[data-testid="header-actions"]').click();
-      cy.get('.danger > [data-testid="entity-button"]').click();
-      cy.get('[data-testid="confirmation-input"]').type('test-route');
-      cy.get('[data-testid="modal-action-button"]').click();
+      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      cy.get(selectors.layout.sidebarItemRoutes).click();
+      cy.get(selectors.routeListPage.routeName).click();
+      cy.get(selectors.layout.headerActions).click();
+      cy.get(selectors.layout.dangerEntityButton).click();
+      cy.get(selectors.layout.confirmationInput).type('test-route');
+      cy.get(selectors.layout.modalActionButton).click();
     });
 
     it('should clean up service', () => {
-      ensureSidebarItemVisible('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link');
-      cy.get('[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link').click();
-      cy.get('[data-testid="test-service"] > [data-testid="name"] b').click();
-      cy.get('[data-testid="header-actions"]').click();
-      cy.get('.danger > [data-testid="entity-button"]').click();
-      cy.get('[data-testid="confirmation-input"]').type('test-service');
-      cy.get('[data-testid="modal-action-button"]').click();
+      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
+      cy.get(selectors.layout.sidebarItemGatewayServices).click();
+      cy.get(selectors.serviceListPage.serviceNameLink).click();
+      cy.get(selectors.layout.headerActions).click();
+      cy.get(selectors.layout.dangerEntityButton).click();
+      cy.get(selectors.layout.confirmationInput).type('test-service');
+      cy.get(selectors.layout.modalActionButton).click();
     });
 
   });

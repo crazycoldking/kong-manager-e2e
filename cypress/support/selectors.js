@@ -7,10 +7,7 @@ export const selectors = {
     widget: 'div[class="widget"]',
     // nav
     workspaceIcon: 'div[class="sidebar-item-icon kui-icon overview-icon"]',
-    // //*[@id="app"]/aside/div[2]/nav/ul/li[1]/a/div/div[2]/div
     workspacesText: 'div[class="sidebar-item-icon kui-icon overview-icon"]::siblings[data-testid="sidebar-item-workspaces"] > .sidebar-item-link > .sidebar-item-display',
-
-
     heading: 'h1',
     usernameInput: 'input[name=username]',
     passwordInput: 'input[name=password]',
@@ -18,60 +15,44 @@ export const selectors = {
     errorMessage: '.error-message',
     successMessage: '.success-message'
   },
-  dashboardPage: {
-    heading: 'h1',
-    addServiceButton: 'button[href="/services/add"]',
-    serviceList: '.service-list',
-    serviceName: '.service-name',
-    serviceUrl: '.service-url',
-    serviceProtocol: '.service-protocol',
-    serviceRoutes: '.service-routes',
-    serviceRoutesName: '.service-routes-name',
-    serviceRoutesPath: '.service-routes-path',
-    serviceRoutesMethods: '.service-routes-methods',
-    serviceRoutesStripPath: '.service-routes-strip-path',
-    serviceRoutesPreserveHost: '.service-routes-preserve-host',
-    serviceRoutesUpstreamHost: '.service-routes-upstream-host',
-    serviceRoutesUpstreamPort: '.service-routes-upstream-port',
+  layout: {
+    sidebarMenuToggle: '.sidebar-menu-toggle',
+    sidebarItemGatewayServices: '[data-testid="sidebar-item-gateway-services"] > .sidebar-item-link',
+    sidebarItemRoutes: '[data-testid="sidebar-item-routes"] > .sidebar-item-link',
+    emptyStateAction: '[data-testid="empty-state-action"]',
+    actionButton: '[data-testid="action-button"]',
+    headerActions: '[data-testid="header-actions"]',
+    dangerEntityButton: '.danger > [data-testid="entity-button"]',
+    confirmationInput: '[data-testid="confirmation-input"]',
+    modalActionButton: '[data-testid="modal-action-button"]'
   },
-  serviceAddPage: {
-    heading: 'h1',
-    nameInput: 'input[name=name]',
-    urlInput: 'input[name=url]',
-    protocolInput: 'select[name=protocol]',
-    routesNameInput: 'input[name=routes.name]',
-    routesPathInput: 'input[name=routes.path]',
-    routesMethodsInput: 'select[name=routes.methods]',
-    routesStripPathInput: 'input[name=routes.strip_path]',
-    routesPreserveHostInput: 'input[name=routes.preserve_host]',
-    routesUpstreamHostInput: 'input[name=routes.upstream_host]',
-    routesUpstreamPortInput: 'input[name=routes.upstream_port]',
+  serviceCreatePage: {
+    urlInput: '[data-testid="gateway-service-url-input"]',
+    nameInput: '[data-testid="gateway-service-name-input"]',
+    tagsCollapseTrigger: '[data-testid="tags-collapse"] [data-testid="collapse-trigger-content"]',
+    tagsInput: '[data-testid="gateway-service-tags-input"]',
+    submitButton: '[data-testid="service-create-form-submit"]',
+    title: '.title'
   },
-  serviceEditPage: {
-    heading: 'h1',
-    nameInput: 'input[name=name]',
-    urlInput: 'input[name=url]',
-    protocolInput: 'select[name=protocol]',
-    routesNameInput: 'input[name=routes.name]',
-    routesPathInput: 'input[name=routes.path]',
-    routesMethodsInput: 'select[name=routes.methods]',
-    routesStripPathInput: 'input[name=routes.strip_path]',
-    routesPreserveHostInput: 'input[name=routes.preserve_host]',
-    routesUpstreamHostInput: 'input[name=routes.upstream_host]',
-    routesUpstreamPortInput: 'input[name=routes.upstream_port]',
+  serviceListPage: {
+    serviceNameLink: '[data-testid="test-service"] > [data-testid="name"] b',
+    protocol: '[data-testid="protocol"] > .cell-wrapper > .content-wrapper',
+    host: '[data-testid="host"] > .cell-wrapper > .content-wrapper',
+    port: '[data-testid="port"] > .cell-wrapper > .content-wrapper',
+    tags: '[data-testid="tags"] > .cell-wrapper > .content-wrapper'
   },
-  serviceDeletePage: {
-    heading: 'h1',
-    confirmButton: 'button[type=submit]',
+  routeCreatePage: {
+    nameInput: '[data-testid="route-form-name"]',
+    tagsInput: '[data-testid="route-form-tags"]',
+    pathsInput: '[data-testid="route-form-paths-input-1"]',
+    hostsInput: '[data-testid="route-form-hosts-input-1"]',
+    methodsMultiselect: '.multiselect-icons-container',
+    getMethodItem: '[data-testid="multiselect-item-GET"] > .multiselect-item-container > button > .multiselect-item-label',
+    submitButton: '[data-testid="route-create-form-submit"]'
   },
-  serviceRoutesEditPage: {
-    heading: 'h1',
-    nameInput: 'input[name=routes.name]',
-    pathInput: 'input[name=routes.path]',
-    methodsInput: 'select[name=routes.methods]',
-    stripPathInput: 'input[name=routes.strip_path]',
-    preserveHostInput: 'input[name=routes.preserve_host]',
-    upstreamHostInput: 'input[name=routes.upstream_host]',
-    upstreamPortInput: 'input[name=routes.upstream_port]',
-  }   
+  routeListPage: {
+    routeName: 'b',
+    hosts: '[data-testid="hosts"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper',
+    tags: '[data-testid="tags"] > .cell-wrapper > .content-wrapper > .k-truncate > .truncate-container > .k-badge > .badge-content > .badge-content-wrapper'
+  }
 };
