@@ -1,6 +1,11 @@
 # Kong Manager E2E UI Test Suite
 
 This repository contains end-to-end UI test suites for Kong Manager, built with Cypress for automated browser testing.
+Current test cases:
+- Create a service and verify the service is created successfully
+- Create a route and verify the route is created successfully
+
+Will add more test cases in the future.
 
 ## Prerequisites
 - Node.js 14.x or later
@@ -33,9 +38,10 @@ ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD
 ## Kong Manager Test Environment setup
 - Download the [docker-compose file](https://drive.google.com/file/d/1ZqYLsFhcBAseFofEV8YCcOt4vZnItiBi/view?usp=sharing)
 - Navigate to the directory where the docker-compose.yml file is located
-- Run `docker-compose up-d`
+- Run `docker-compose up -d`
 - Navigate to http://localhost:8002/ in your browser
 - Make sure you can access the Kong Gateway UI (Kong Manager)
+- The default workspace is `default`
 
 ## Running Tests
 
@@ -77,7 +83,7 @@ Screenshots and videos of test failures are automatically saved to `cypress/scre
 
 ## CI/CD Integration
 
-This project uses GitHub Actions for continuous integration. The workflow file is located at `.github/workflows/ci.yml` and includes the following steps:
+This project uses GitHub Actions for continuous integration. The workflow file is located at `.github/workflows/main.yml` and includes the following steps:
 
 1. Checkout code
 2. Set up Node.js environment
@@ -86,6 +92,7 @@ This project uses GitHub Actions for continuous integration. The workflow file i
 5. Run Cypress E2E tests
 6. Clean up resources
 7. Upload test artifacts on failure
+
 
 ### Required GitHub Secrets
 To run the CI workflow, you need to configure these secrets in your GitHub repository:

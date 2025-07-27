@@ -5,9 +5,11 @@
     "port": 80,
     "protocol": "http",
     "path": "/",
-    "method": "GET",
-    "retries": 0,
-    "read_timeout": 60000,
+    "retries": 5,
     "connect_timeout": 60000,
-    "write_timeout": 60000
+    "read_timeout": 60000,
+    "write_timeout": 60000,
+    "tags": [
+        "test-tag"
+    ]
 }

@@ -1,0 +1,12 @@
+{
+  "hosts": [
+    "test-service.com"
+  ],
+  "name": "test-route",
+  "paths": [
+    "/api/v1"
+  ],
+  "tags": [
+    "test-tag"
+  ]
+}
