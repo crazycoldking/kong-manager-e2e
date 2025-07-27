@@ -47,7 +47,7 @@ jobs:
 
       - name: Stop test environment
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
       - name: Upload Cypress artifacts
         if: failure()
