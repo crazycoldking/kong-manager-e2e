@@ -1,0 +1,59 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:20.10
+        options: --privileged
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start test environment
+        run: docker-compose -f test-env/docker-compose.yml up -d
+
+      - name: Wait for services to be ready
+        run: npx wait-on http://localhost:8002
+        timeout-minutes: 5
+
+      - name: Run Cypress tests
+        run: npx cypress run
+        env:
+          ADMIN_USER: ${{ secrets.ADMIN_USER }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          INVALID_USER: ${{ secrets.INVALID_USER }}
+          INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+
+      - name: Stop test environment
+        if: always()
+        run: docker-compose -f docker-compose-full.yml down
+
+      - name: Upload Cypress artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/screenshots
+            cypress/videos
