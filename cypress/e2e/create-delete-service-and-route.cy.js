@@ -1,5 +1,6 @@
 import { devices } from '../support/devices';
 import { selectors } from '../support/selectors';
+import { ensureSidebarItemVisible } from '../support/utils';
 
 devices.forEach(device => {
   describe(`Kong Manager UI Test on ${device.name}`, () => {
@@ -15,18 +16,8 @@ devices.forEach(device => {
       cy.viewport(device.viewport.width, device.viewport.height);
     });
 
-    // Helper function to handle responsive sidebar interaction
-    const ensureSidebarItemVisible = (itemSelector) => {
-      cy.get('body').then($body => {
-        if (device.viewport.width <= 1024) {
-          cy.get(selectors.layout.sidebarMenuToggle).click();
-        }
-        cy.get(itemSelector).should('be.visible');
-      });
-    };
-
     it('should check service and route count are 0 by default', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
       cy.get(selectors.layout.sidebarItemsOverview).click();
       cy.get(selectors.overviewPage.serviceCount).should('have.text', '0');
       cy.get(selectors.overviewPage.routeCount).should('have.text', '0');
@@ -34,7 +25,7 @@ devices.forEach(device => {
 
     it('should create a service with metadata', () => {
       cy.fixture('service_info.json').then((serviceData) => {
-        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
         cy.get(selectors.layout.sidebarItemsOverview).click();
         cy.get(selectors.layout.actionButton).click();
 
@@ -72,7 +63,7 @@ devices.forEach(device => {
     });
 
     it('should verify the service count and route count in overview page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
       cy.get(selectors.layout.sidebarItemsOverview).click();
       cy.get(selectors.overviewPage.title).should('have.text', 'Overview');
       cy.get(selectors.overviewPage.serviceCount).should('have.text', '1');
@@ -80,7 +71,7 @@ devices.forEach(device => {
     });
 
     it('should verify the service is created in Gateway Service page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices, device);
       cy.get(selectors.layout.sidebarItemGatewayServices).click();
       // check lable of Gateway Services
       cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
@@ -93,7 +84,7 @@ devices.forEach(device => {
 
     it('should create a route with metadata', () => {
       cy.fixture('route_info.json').then((routeData) => {
-        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
         cy.get(selectors.layout.sidebarItemGatewayServices).click();
         cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
 
@@ -120,14 +111,15 @@ devices.forEach(device => {
     });
 
     it('should verify the service and route count in Overview page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
+
       cy.get(selectors.overviewPage.title).should('have.text', 'Overview');
       cy.get(selectors.overviewPage.serviceCount).should('have.text', '1');
       cy.get(selectors.overviewPage.routeCount).should('have.text', '1');
     });
 
     it('should verify the route is created in Routes page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
       cy.get(selectors.layout.sidebarItemRoutes).click();
       cy.get(selectors.routesPage.routeName).should('have.text', 'test-route');
       cy.get(selectors.routesPage.hosts).should('have.text', 'test-service.com');
@@ -138,7 +130,7 @@ devices.forEach(device => {
     });
 
     it('should clean up the route', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
       cy.get(selectors.layout.sidebarItemRoutes).click();
       cy.get(selectors.routesPage.routeName).click();
       cy.get(selectors.layout.headerActions).click();
@@ -148,7 +140,7 @@ devices.forEach(device => {
     });
 
     it('should clean up service', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
       cy.get(selectors.layout.sidebarItemGatewayServices).click();
       cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
       cy.get(selectors.layout.headerActions).click();
