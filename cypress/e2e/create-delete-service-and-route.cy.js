@@ -1,6 +1,9 @@
 import { devices } from '../support/devices';
-import { selectors } from '../support/selectors';
 import { ensureSidebarItemVisible } from '../support/utils';
+import { GatewayServicesPage } from '../selectors/Gateway-Services-page';
+import { Layout } from '../selectors/common/layout';
+import { OverviewPage } from '../selectors/Overview';
+import { RoutesPage } from '../selectors/Routes-page';
 
 devices.forEach(device => {
   describe(`Kong Manager UI Test on ${device.name}`, () => {
@@ -17,139 +20,138 @@ devices.forEach(device => {
     });
 
     it('should check service and route count are 0 by default', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-      cy.get(selectors.layout.sidebarItemsOverview).click();
-      cy.get(selectors.overviewPage.serviceCount).should('have.text', '0');
-      cy.get(selectors.overviewPage.routeCount).should('have.text', '0');
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+      cy.get(Layout.sidebarItemsOverview).click();
+      cy.get(OverviewPage.title).should('have.text', 'Overview');
+      cy.get(OverviewPage.serviceCount).should('have.text', '0');
+      cy.get(OverviewPage.routeCount).should('have.text', '0');
     });
 
     it('should create a service with metadata', () => {
       cy.fixture('service_info.json').then((serviceData) => {
-        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-        cy.get(selectors.layout.sidebarItemsOverview).click();
-        cy.get(selectors.layout.actionButton).click();
+        ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+        cy.get(Layout.sidebarItemsOverview).click();
+        cy.get(Layout.actionButton).click();
 
         // Common service creation steps
-        cy.get(selectors.serviceCreatePage.urlInput).type(serviceData.url);
+        cy.get(GatewayServicesPage.urlInput).type(serviceData.url);
         // view advanced fields
-        cy.get(selectors.serviceCreatePage.viewAdvancedFieldsCollapseTrigger).click();
-        cy.get(selectors.serviceCreatePage.retryLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.retryInput).clear().type(serviceData.retries.toString());
-        cy.get(selectors.serviceCreatePage.connectTimeoutLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.connectTimeoutInput).clear().type(serviceData.connect_timeout.toString());
-        cy.get(selectors.serviceCreatePage.writeTimeoutLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.writeTimeoutInput).clear().type(serviceData.write_timeout.toString());
-        cy.get(selectors.serviceCreatePage.readTimeoutLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.readTimeoutInput).clear().type(serviceData.read_timeout.toString());
-        cy.get(selectors.serviceCreatePage.clientCertificateLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.caCertificatesLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.tlsVerifyLabel).should('be.visible');
-        cy.get(selectors.serviceCreatePage.tlsVerifyCheckbox).check();
+        cy.get(GatewayServicesPage.viewAdvancedFieldsCollapseTrigger).click();
+        cy.get(GatewayServicesPage.retryLabel).should('be.visible');
+        cy.get(GatewayServicesPage.retryInput).clear().type(serviceData.retries.toString());
+        cy.get(GatewayServicesPage.connectTimeoutLabel).should('be.visible');
+        cy.get(GatewayServicesPage.connectTimeoutInput).clear().type(serviceData.connect_timeout.toString());
+        cy.get(GatewayServicesPage.writeTimeoutLabel).should('be.visible');
+        cy.get(GatewayServicesPage.writeTimeoutInput).clear().type(serviceData.write_timeout.toString());
+        cy.get(GatewayServicesPage.readTimeoutLabel).should('be.visible');
+        cy.get(GatewayServicesPage.readTimeoutInput).clear().type(serviceData.read_timeout.toString());
+        cy.get(GatewayServicesPage.clientCertificateLabel).should('be.visible');
+        cy.get(GatewayServicesPage.caCertificatesLabel).should('be.visible');
+        cy.get(GatewayServicesPage.tlsVerifyLabel).should('be.visible');
+        cy.get(GatewayServicesPage.tlsVerifyCheckbox).check();
 
 
         // add name
-        cy.get(selectors.serviceCreatePage.nameInput).clear().type(serviceData.name);
+        cy.get(GatewayServicesPage.nameInput).clear().type(serviceData.name);
         // add tags
-        cy.get(selectors.serviceCreatePage.tagsCollapseTrigger).click();
-        cy.get(selectors.serviceCreatePage.tagsInput).type(serviceData.tags.join(', '));
+        cy.get(GatewayServicesPage.tagsCollapseTrigger).click();
+        cy.get(GatewayServicesPage.tagsInput).type(serviceData.tags.join(', '));
         // view configuration
-        cy.get(selectors.serviceCreatePage.viewConfigurationButton).click();
-        cy.get(selectors.serviceCreatePage.configurationTitle).should('be.visible');
-        cy.get(selectors.serviceCreatePage.closeConfigurationButton).click();
+        cy.get(GatewayServicesPage.viewConfigurationButton).click();
+        cy.get(GatewayServicesPage.configurationTitle).should('be.visible');
+        cy.get(GatewayServicesPage.closeConfigurationButton).click();
 
-        cy.get(selectors.serviceCreatePage.submitButton).click();
-        cy.get(selectors.serviceCreatePage.title).should('have.text', 'test-service').should('be.visible');
+        cy.get(GatewayServicesPage.submitButton).click();
+        cy.get(GatewayServicesPage.title).should('have.text', 'test-service').should('be.visible');
       })
     });
 
     it('should verify the service count and route count in overview page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-      cy.get(selectors.layout.sidebarItemsOverview).click();
-      cy.get(selectors.overviewPage.title).should('have.text', 'Overview');
-      cy.get(selectors.overviewPage.serviceCount).should('have.text', '1');
-      cy.get(selectors.overviewPage.routeCount).should('have.text', '0');
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+      cy.get(Layout.sidebarItemsOverview).click();
+      cy.get(OverviewPage.title).should('have.text', 'Overview');
+      cy.get(OverviewPage.serviceCount).should('have.text', '1');
+      cy.get(OverviewPage.routeCount).should('have.text', '0');
     });
 
     it('should verify the service is created in Gateway Service page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices, device);
-      cy.get(selectors.layout.sidebarItemGatewayServices).click();
+      ensureSidebarItemVisible(Layout.sidebarItemGatewayServices, device);
+      cy.get(Layout.sidebarItemGatewayServices).click();
       // check lable of Gateway Services
-      cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
-      cy.get(selectors.gatewayServicesPage.serviceNameLink).should('have.text', 'test-service');
-      cy.get(selectors.gatewayServicesPage.protocol).should('have.text', 'http');
-      cy.get(selectors.gatewayServicesPage.host).should('have.text', 'test-service.com');
-      cy.get(selectors.gatewayServicesPage.port).should('have.text', '80');
-      cy.get(selectors.gatewayServicesPage.tags).should('have.text', 'test-tag');
+      cy.get(GatewayServicesPage.title).should('have.text', 'Gateway Services');
+      cy.get(GatewayServicesPage.serviceNameLink).should('have.text', 'test-service');
+      cy.get(GatewayServicesPage.protocol).should('have.text', 'http');
+      cy.get(GatewayServicesPage.host).should('have.text', 'test-service.com');
+      cy.get(GatewayServicesPage.port).should('have.text', '80');
+      cy.get(GatewayServicesPage.tags).should('have.text', 'test-tag');
     });
 
     it('should create a route with metadata', () => {
       cy.fixture('route_info.json').then((routeData) => {
-        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-        cy.get(selectors.layout.sidebarItemGatewayServices).click();
-        cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
+        ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+        cy.get(Layout.sidebarItemGatewayServices).click();
+        cy.get(GatewayServicesPage.title).should('have.text', 'Gateway Services');
 
-        cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
-        cy.get(selectors.gatewayServicesPage.addARouteButton).click();
+        cy.get(GatewayServicesPage.serviceNameLink).click();
+        cy.get(GatewayServicesPage.addARouteButton).click();
 
         // select advanced radio button
-        cy.get(selectors.routeCreatePage.advancedRadioButton).click();
+        cy.get(RoutesPage.advancedRadioButton).click();
         // select basic radio button
-        cy.get(selectors.routeCreatePage.basicRadioButton).click();
+        cy.get(RoutesPage.basicRadioButton).click();
 
         // Common route creation steps using metadata
-        cy.get(selectors.routeCreatePage.nameInput).type(routeData.name);
+        cy.get(RoutesPage.nameInput).type(routeData.name);
         // select a service 
-        cy.get(selectors.routeCreatePage.tagsInput).type(routeData.tags.join(', '));
-        cy.get(selectors.routeCreatePage.pathsInput).type(routeData.paths[0]);
-        cy.get(selectors.routeCreatePage.hostsInput).type(routeData.hosts[0]);
-        cy.get(selectors.routeCreatePage.methodsMultiselect).click();
-        cy.get(selectors.routeCreatePage.getMethodItem).click();
-        cy.get('body').click();
+        cy.get(RoutesPage.tagsInput).type(routeData.tags.join(', '));
+        cy.get(RoutesPage.pathsInput).type(routeData.paths[0]);
+        cy.get(RoutesPage.hostsInput).type(routeData.hosts[0]);
+        cy.get(RoutesPage.methodsMultiselect).click();
+        cy.get(RoutesPage.getMethodItem).click();
+        cy.get(Layout.body).click();
 
-        cy.get(selectors.routeCreatePage.submitButton).click();
+        cy.get(RoutesPage.submitButton).click();
       });
     });
 
     it('should verify the service and route count in Overview page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
 
-      cy.get(selectors.overviewPage.title).should('have.text', 'Overview');
-      cy.get(selectors.overviewPage.serviceCount).should('have.text', '1');
-      cy.get(selectors.overviewPage.routeCount).should('have.text', '1');
+      cy.get(OverviewPage.title).should('have.text', 'Overview');
+      cy.get(OverviewPage.serviceCount).should('have.text', '1');
+      cy.get(OverviewPage.routeCount).should('have.text', '1');
     });
 
     it('should verify the route is created in Routes page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-      cy.get(selectors.layout.sidebarItemRoutes).click();
-      cy.get(selectors.routesPage.routeName).should('have.text', 'test-route');
-      cy.get(selectors.routesPage.hosts).should('have.text', 'test-service.com');
-      cy.get(selectors.routesPage.tags).should('have.text', 'test-route-tag');
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+      cy.get(Layout.sidebarItemRoutes).click();
+      cy.get(RoutesPage.routeName).should('have.text', 'test-route');
+      cy.get(RoutesPage.hosts).should('have.text', 'test-service.com');
+      cy.get(RoutesPage.tags).should('have.text', 'test-route-tag');
 
-      cy.get(selectors.routesPage.routeName).click();
-      cy.get(selectors.routeDetailPage.title).should('have.text', 'test-route');
+      cy.get(RoutesPage.routeName).click();
+      cy.get(RoutesPage.title).should('have.text', 'test-route');
     });
 
     it('should clean up the route', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-      cy.get(selectors.layout.sidebarItemRoutes).click();
-      cy.get(selectors.routesPage.routeName).click();
-      cy.get(selectors.layout.headerActions).click();
-      cy.get(selectors.layout.dangerEntityButton).click();
-      cy.get(selectors.layout.confirmationInput).type('test-route');
-      cy.get(selectors.layout.modalActionButton).click();
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+      cy.get(Layout.sidebarItemRoutes).click();
+      cy.get(RoutesPage.routeName).click();
+      cy.get(Layout.headerActions).click();
+      cy.get(Layout.dangerEntityButton).click();
+      cy.get(Layout.confirmationInput).type('test-route');
+      cy.get(Layout.modalActionButton).click();
     });
 
     it('should clean up service', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview, device);
-      cy.get(selectors.layout.sidebarItemGatewayServices).click();
-      cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
-      cy.get(selectors.layout.headerActions).click();
-      cy.get(selectors.layout.dangerEntityButton).click();
-      cy.get(selectors.layout.confirmationInput).type('test-service');
-      cy.get(selectors.layout.modalActionButton).click();
+      ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
+      cy.get(Layout.sidebarItemGatewayServices).click();
+      cy.get(GatewayServicesPage.serviceNameLink).click();
+      cy.get(Layout.headerActions).click();
+      cy.get(Layout.dangerEntityButton).click();
+      cy.get(Layout.confirmationInput).type('test-service');
+      cy.get(Layout.modalActionButton).click();
     });
-
-
 
   });
 });
