@@ -27,41 +27,42 @@ devices.forEach(device => {
     });
 
     it('should create a service with metadata', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
-      cy.get(selectors.layout.sidebarItemsOverview).click();
-      cy.get(selectors.layout.actionButton).click();
+      cy.fixture('service_info.json').then((serviceData) => {
+        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+        cy.get(selectors.layout.sidebarItemsOverview).click();
+        cy.get(selectors.layout.actionButton).click();
 
-      // Common service creation steps
-      cy.get(selectors.serviceCreatePage.urlInput).type('http://test-service.com');
-      // view advanced fields
-      cy.get(selectors.serviceCreatePage.viewAdvancedFieldsCollapseTrigger).click();
-      // check lables
-      cy.get(selectors.serviceCreatePage.retryLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.retryInput).clear().type('3');
-      cy.get(selectors.serviceCreatePage.connectTimeoutLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.connectTimeoutInput).clear().type('30000');
-      cy.get(selectors.serviceCreatePage.writeTimeoutLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.writeTimeoutInput).clear().type('30000');
-      cy.get(selectors.serviceCreatePage.readTimeoutLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.readTimeoutInput).clear().type('30000');
-      cy.get(selectors.serviceCreatePage.clientCertificateLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.caCertificatesLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.tlsVerifyLabel).should('be.visible');
-      cy.get(selectors.serviceCreatePage.tlsVerifyCheckbox).check();
+        // Common service creation steps
+        cy.get(selectors.serviceCreatePage.urlInput).type(serviceData.url);
+        // view advanced fields
+        cy.get(selectors.serviceCreatePage.viewAdvancedFieldsCollapseTrigger).click();
+        cy.get(selectors.serviceCreatePage.retryLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.retryInput).clear().type(serviceData.retries.toString());
+        cy.get(selectors.serviceCreatePage.connectTimeoutLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.connectTimeoutInput).clear().type(serviceData.connect_timeout.toString());
+        cy.get(selectors.serviceCreatePage.writeTimeoutLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.writeTimeoutInput).clear().type(serviceData.write_timeout.toString());
+        cy.get(selectors.serviceCreatePage.readTimeoutLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.readTimeoutInput).clear().type(serviceData.read_timeout.toString());
+        cy.get(selectors.serviceCreatePage.clientCertificateLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.caCertificatesLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.tlsVerifyLabel).should('be.visible');
+        cy.get(selectors.serviceCreatePage.tlsVerifyCheckbox).check();
 
 
-      // add name
-      cy.get(selectors.serviceCreatePage.nameInput).clear().type('test-service');
-      // add tags
-      cy.get(selectors.serviceCreatePage.tagsCollapseTrigger).click();
-      cy.get(selectors.serviceCreatePage.tagsInput).type('test-tag');
-      // view configuration
-      cy.get(selectors.serviceCreatePage.viewConfigurationButton).click();
-      cy.get(selectors.serviceCreatePage.configurationTitle).should('be.visible');
-      cy.get(selectors.serviceCreatePage.closeConfigurationButton).click();
+        // add name
+        cy.get(selectors.serviceCreatePage.nameInput).clear().type(serviceData.name);
+        // add tags
+        cy.get(selectors.serviceCreatePage.tagsCollapseTrigger).click();
+        cy.get(selectors.serviceCreatePage.tagsInput).type(serviceData.tags.join(', '));
+        // view configuration
+        cy.get(selectors.serviceCreatePage.viewConfigurationButton).click();
+        cy.get(selectors.serviceCreatePage.configurationTitle).should('be.visible');
+        cy.get(selectors.serviceCreatePage.closeConfigurationButton).click();
 
-      cy.get(selectors.serviceCreatePage.submitButton).click();
-      cy.get(selectors.serviceCreatePage.title).should('have.text', 'test-service').should('be.visible');
+        cy.get(selectors.serviceCreatePage.submitButton).click();
+        cy.get(selectors.serviceCreatePage.title).should('have.text', 'test-service').should('be.visible');
+      })
     });
 
     it('should verify the service count and route count in overview page', () => {
