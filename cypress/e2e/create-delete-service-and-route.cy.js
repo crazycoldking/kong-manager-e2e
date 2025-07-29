@@ -27,17 +27,8 @@ devices.forEach(device => {
     });
 
     it('should create a service with metadata', () => {
-      cy.get('body').then($body => {
-        if (device.viewport.width <= 1024) {
-          // Tablet view: need to open sidebar first
-          cy.get(selectors.layout.sidebarMenuToggle).click();
-          cy.get(selectors.layout.sidebarItemGatewayServices).click();
-          cy.get(selectors.layout.emptyStateAction).click();
-        } else {
-          // Desktop view: direct access
-          cy.get(selectors.layout.actionButton).click();
-        }
-      });
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      cy.get(selectors.layout.actionButton).click();
 
       // Common service creation steps
       cy.get(selectors.serviceCreatePage.urlInput).type('http://test-service.com');
@@ -92,17 +83,8 @@ devices.forEach(device => {
     });
 
     it('should create a route with metadata', () => {
-      cy.get('body').then($body => {
-        if (device.viewport.width <= 1024) {
-          // Tablet view
-          ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
-          cy.get(selectors.layout.sidebarItemGatewayServices).click();
-        } else {
-          // Desktop view
-          cy.get(selectors.layout.sidebarItemGatewayServices).click();
-
-        }
-      });
+      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      cy.get(selectors.layout.sidebarItemGatewayServices).click();
       cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
 
       cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
