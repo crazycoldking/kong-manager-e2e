@@ -20,7 +20,7 @@ devices.forEach(device => {
     };
 
     it('should check service and route count are 0 by default', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
       cy.get(selectors.layout.sidebarItemsOverview).click();
       cy.get(selectors.overviewPage.serviceCount).should('have.text', '0');
       cy.get(selectors.overviewPage.routeCount).should('have.text', '0');
@@ -28,6 +28,7 @@ devices.forEach(device => {
 
     it('should create a service with metadata', () => {
       ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      cy.get(selectors.layout.sidebarItemsOverview).click();
       cy.get(selectors.layout.actionButton).click();
 
       // Common service creation steps
@@ -65,6 +66,7 @@ devices.forEach(device => {
 
     it('should verify the service count and route count in overview page', () => {
       ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+      cy.get(selectors.layout.sidebarItemsOverview).click();
       cy.get(selectors.overviewPage.title).should('have.text', 'Overview');
       cy.get(selectors.overviewPage.serviceCount).should('have.text', '1');
       cy.get(selectors.overviewPage.routeCount).should('have.text', '0');
@@ -83,7 +85,7 @@ devices.forEach(device => {
     });
 
     it('should create a route with metadata', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
       cy.get(selectors.layout.sidebarItemGatewayServices).click();
       cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
 
@@ -116,7 +118,7 @@ devices.forEach(device => {
     });
 
     it('should verify the route is created in Routes page', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
       cy.get(selectors.layout.sidebarItemRoutes).click();
       cy.get(selectors.routesPage.routeName).should('have.text', 'test-route');
       cy.get(selectors.routesPage.hosts).should('have.text', 'test-service.com');
@@ -127,7 +129,7 @@ devices.forEach(device => {
     });
 
     it('should clean up the route', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemRoutes);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
       cy.get(selectors.layout.sidebarItemRoutes).click();
       cy.get(selectors.routesPage.routeName).click();
       cy.get(selectors.layout.headerActions).click();
@@ -137,7 +139,7 @@ devices.forEach(device => {
     });
 
     it('should clean up service', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemGatewayServices);
+      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
       cy.get(selectors.layout.sidebarItemGatewayServices).click();
       cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
       cy.get(selectors.layout.headerActions).click();
