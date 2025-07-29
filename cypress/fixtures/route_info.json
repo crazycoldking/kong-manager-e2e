@@ -4,9 +4,9 @@
   ],
   "name": "test-route",
   "paths": [
-    "/api/v1"
+    "/test-route"
   ],
   "tags": [
-    "test-tag"
+    "test-route-tag"
   ]
 }

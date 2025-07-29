@@ -86,29 +86,31 @@ devices.forEach(device => {
     });
 
     it('should create a route with metadata', () => {
-      ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
-      cy.get(selectors.layout.sidebarItemGatewayServices).click();
-      cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
+      cy.fixture('route_info.json').then((routeData) => {
+        ensureSidebarItemVisible(selectors.layout.sidebarItemsOverview);
+        cy.get(selectors.layout.sidebarItemGatewayServices).click();
+        cy.get(selectors.gatewayServicesPage.title).should('have.text', 'Gateway Services');
 
-      cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
-      cy.get(selectors.gatewayServicesPage.addARouteButton).click();
+        cy.get(selectors.gatewayServicesPage.serviceNameLink).click();
+        cy.get(selectors.gatewayServicesPage.addARouteButton).click();
 
-      // select advanced radio button
-      cy.get(selectors.routeCreatePage.advancedRadioButton).click();
-      // select basic radio button
-      cy.get(selectors.routeCreatePage.basicRadioButton).click();
+        // select advanced radio button
+        cy.get(selectors.routeCreatePage.advancedRadioButton).click();
+        // select basic radio button
+        cy.get(selectors.routeCreatePage.basicRadioButton).click();
 
-      // Common route creation steps
-      cy.get(selectors.routeCreatePage.nameInput).type('test-route');
-      // select a service 
-      cy.get(selectors.routeCreatePage.tagsInput).type('test-route-tag');
-      cy.get(selectors.routeCreatePage.pathsInput).type('/test-route');
-      cy.get(selectors.routeCreatePage.hostsInput).type('test-service.com');
-      cy.get(selectors.routeCreatePage.methodsMultiselect).click();
-      cy.get(selectors.routeCreatePage.getMethodItem).click();
-      cy.get('body').click();
+        // Common route creation steps using metadata
+        cy.get(selectors.routeCreatePage.nameInput).type(routeData.name);
+        // select a service 
+        cy.get(selectors.routeCreatePage.tagsInput).type(routeData.tags.join(', '));
+        cy.get(selectors.routeCreatePage.pathsInput).type(routeData.paths[0]);
+        cy.get(selectors.routeCreatePage.hostsInput).type(routeData.hosts[0]);
+        cy.get(selectors.routeCreatePage.methodsMultiselect).click();
+        cy.get(selectors.routeCreatePage.getMethodItem).click();
+        cy.get('body').click();
 
-      cy.get(selectors.routeCreatePage.submitButton).click();
+        cy.get(selectors.routeCreatePage.submitButton).click();
+      });
     });
 
     it('should verify the service and route count in Overview page', () => {
