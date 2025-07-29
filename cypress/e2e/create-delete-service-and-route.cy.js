@@ -1,9 +1,15 @@
 import { devices } from '../support/devices';
 import { selectors } from '../support/selectors';
 
-
 devices.forEach(device => {
   describe(`Kong Manager UI Test on ${device.name}`, () => {
+
+    // clean up routes and services before all tests
+    before(() => {
+      cy.cleanUpRoutesAndServices();
+    });
+
+
     beforeEach(() => {
       cy.visit(`/default/overview`);
       cy.viewport(device.viewport.width, device.viewport.height);
@@ -150,6 +156,8 @@ devices.forEach(device => {
       cy.get(selectors.layout.confirmationInput).type('test-service');
       cy.get(selectors.layout.modalActionButton).click();
     });
+
+
 
   });
 });
