@@ -7,7 +7,6 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 import './commands';
 
 beforeEach(() => {
-  cy.viewport(1280, 720);
   cy.clearCookies();
   cy.clearLocalStorage();
 });
