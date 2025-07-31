@@ -1,5 +1,5 @@
 import { devices } from '../support/devices';
-import { ensureSidebarItemVisible } from '../support/utils';
+import { ensureSidebarItemVisible, ensureSidebarToggleInActive } from '../support/utils';
 import { GatewayServicesPage } from '../selectors/Gateway-Services-page';
 import { Layout } from '../selectors/common/layout';
 import { OverviewPage } from '../selectors/Overview';
@@ -8,18 +8,13 @@ import { RoutesPage } from '../selectors/Routes-page';
 devices.forEach(device => {
   describe(`Kong Manager UI Test on ${device.name}`, () => {
 
-    // clean up routes and services before all tests
-    before(() => {
-      cy.cleanUpRoutesAndServices();
-    });
-
-
     beforeEach(() => {
+      cy.cleanUpRoutesAndServices();
       cy.visit(`/default/overview`);
       cy.viewport(device.viewport.width, device.viewport.height);
     });
 
-    it('should check service and route count are 0 by default', () => {
+    it('should check service and route count are 0 by default in Overview page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemsOverview).click();
       cy.get(OverviewPage.title).should('have.text', 'Overview');
@@ -27,11 +22,15 @@ devices.forEach(device => {
       cy.get(OverviewPage.routeCount).should('have.text', '0');
     });
 
-    it('should create a service with metadata', () => {
+    it('should create and delete a service and a route with metadata', () => {
       cy.fixture('service_info.json').then((serviceData) => {
         ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
         cy.get(Layout.sidebarItemsOverview).click();
+        ensureSidebarToggleInActive(device);
         cy.get(Layout.actionButton).click();
+
+        // save button is inactive
+        cy.get(GatewayServicesPage.submitButton).should('be.disabled');
 
         // Common service creation steps
         cy.get(GatewayServicesPage.urlInput).type(serviceData.url);
@@ -50,7 +49,6 @@ devices.forEach(device => {
         cy.get(GatewayServicesPage.tlsVerifyLabel).should('be.visible');
         cy.get(GatewayServicesPage.tlsVerifyCheckbox).check();
 
-
         // add name
         cy.get(GatewayServicesPage.nameInput).clear().type(serviceData.name);
         // add tags
@@ -64,19 +62,19 @@ devices.forEach(device => {
         cy.get(GatewayServicesPage.submitButton).click();
         cy.get(GatewayServicesPage.title).should('have.text', 'test-service').should('be.visible');
       })
-    });
 
-    it('should verify the service count and route count in overview page', () => {
+      // verify the service count and route count in overview page
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemsOverview).click();
+      ensureSidebarToggleInActive(device);
       cy.get(OverviewPage.title).should('have.text', 'Overview');
       cy.get(OverviewPage.serviceCount).should('have.text', '1');
       cy.get(OverviewPage.routeCount).should('have.text', '0');
-    });
 
-    it('should verify the service is created in Gateway Service page', () => {
+      // verify the service is created in Gateway Service page
       ensureSidebarItemVisible(Layout.sidebarItemGatewayServices, device);
       cy.get(Layout.sidebarItemGatewayServices).click();
+      ensureSidebarToggleInActive(device);
       // check lable of Gateway Services
       cy.get(GatewayServicesPage.title).should('have.text', 'Gateway Services');
       cy.get(GatewayServicesPage.serviceNameLink).should('have.text', 'test-service');
@@ -84,12 +82,12 @@ devices.forEach(device => {
       cy.get(GatewayServicesPage.host).should('have.text', 'test-service.com');
       cy.get(GatewayServicesPage.port).should('have.text', '80');
       cy.get(GatewayServicesPage.tags).should('have.text', 'test-tag');
-    });
 
-    it('should create a route with metadata', () => {
+      // create a route with metadata in json file
       cy.fixture('route_info.json').then((routeData) => {
         ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
         cy.get(Layout.sidebarItemGatewayServices).click();
+        ensureSidebarToggleInActive(device);
         cy.get(GatewayServicesPage.title).should('have.text', 'Gateway Services');
 
         cy.get(GatewayServicesPage.serviceNameLink).click();
@@ -112,40 +110,40 @@ devices.forEach(device => {
 
         cy.get(RoutesPage.submitButton).click();
       });
-    });
 
-    it('should verify the service and route count in Overview page', () => {
+      // verify the service and route count in Overview page
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
-
+      cy.get(Layout.sidebarItemsOverview).click();
+      ensureSidebarToggleInActive(device);
       cy.get(OverviewPage.title).should('have.text', 'Overview');
       cy.get(OverviewPage.serviceCount).should('have.text', '1');
       cy.get(OverviewPage.routeCount).should('have.text', '1');
-    });
 
-    it('should verify the route is created in Routes page', () => {
+      // verify the route is created in Routes page
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemRoutes).click();
+      ensureSidebarToggleInActive(device);
       cy.get(RoutesPage.routeName).should('have.text', 'test-route');
       cy.get(RoutesPage.hosts).should('have.text', 'test-service.com');
       cy.get(RoutesPage.tags).should('have.text', 'test-route-tag');
 
       cy.get(RoutesPage.routeName).click();
       cy.get(RoutesPage.title).should('have.text', 'test-route');
-    });
 
-    it('should clean up the route', () => {
+      // clean up the routes
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemRoutes).click();
+      ensureSidebarToggleInActive(device);
       cy.get(RoutesPage.routeName).click();
       cy.get(Layout.headerActions).click();
       cy.get(Layout.dangerEntityButton).click();
       cy.get(Layout.confirmationInput).type('test-route');
       cy.get(Layout.modalActionButton).click();
-    });
 
-    it('should clean up service', () => {
+      // clean up services
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemGatewayServices).click();
+      ensureSidebarToggleInActive(device);
       cy.get(GatewayServicesPage.serviceNameLink).click();
       cy.get(Layout.headerActions).click();
       cy.get(Layout.dangerEntityButton).click();
