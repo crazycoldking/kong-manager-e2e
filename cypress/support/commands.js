@@ -29,16 +29,16 @@ Cypress.Commands.add('scrollAndVerifyVisible', (testId) => {
 
 
 Cypress.Commands.add('cleanUpRoutesAndServices', () => {
-  cy.request('GET', 'http://localhost:8001/default/routes')
+  cy.request('GET', Cypress.env('KONG_ADMIN_URL') + '/default/routes')
     .then((response) => {
       response.body.data.forEach((route) => {
-        cy.request('DELETE', `http://localhost:8001/routes/${route.id}`);
+        cy.request('DELETE', Cypress.env('KONG_ADMIN_URL') + `/routes/${route.id}`);
       });
     });
-  cy.request('GET', 'http://localhost:8001/default/services')
+  cy.request('GET', Cypress.env('KONG_ADMIN_URL') + '/default/services')
     .then((response) => {
       response.body.data.forEach((service) => {
-        cy.request('DELETE', `http://localhost:8001/services/${service.name}`);
+        cy.request('DELETE', Cypress.env('KONG_ADMIN_URL') + `/services/${service.name}`);
       });
     });
 });

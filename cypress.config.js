@@ -3,7 +3,10 @@ require('dotenv').config();
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: process.env.KONG_BASE_URL || 'http://localhost:8002',
+    env: {
+      KONG_BASE_URL: process.env.KONG_BASE_URL || 'http://localhost:8002',
+      KONG_ADMIN_URL: process.env.KONG_ADMIN_URL || 'http://localhost:8001',
+    },
     specPattern: 'cypress/e2e/**/*.cy.js',
     supportFile: 'cypress/support/e2e.js',
     fixturesFolder: 'cypress/fixtures',
