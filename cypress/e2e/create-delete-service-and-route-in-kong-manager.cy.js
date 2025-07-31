@@ -59,7 +59,6 @@ devices.forEach(device => {
       })
     });
 
-    // verify the service count and route count in overview page
     it('should verify the service count and route count in overview page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemsOverview).click();
@@ -69,7 +68,6 @@ devices.forEach(device => {
       cy.get(OverviewPage.routeCount).should('have.text', '0');
     })
 
-    // verify the service is created in Gateway Service page
     it('should verify the service is created in Gateway Service page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemGatewayServices, device);
       cy.get(Layout.sidebarItemGatewayServices).click();
@@ -83,24 +81,10 @@ devices.forEach(device => {
       cy.get(GatewayServicesPage.tags).should('have.text', 'test-tag');
     });
 
-    // verify service via kong admin api
     it('should verify service created via kong admin api', () => {
-      cy.request({
-        method: 'GET',
-        url: `${Cypress.env('KONG_ADMIN_URL')}/services`,
-        auth: {
-          type: 'basic',
-          username: 'admin',
-          password: 'admin',
-        },
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.data).to.have.length(1);
-        expect(response.body.data[0].name).to.eq('test-service');
-      });
+      cy.checkResourceViaApi({ path: '/services', description: 'service' }, 1);
     });
 
-    // create a route with metadata in json file
     it('should create a route with metadata', () => {
       cy.fixture('route_info.json').then((routeData) => {
         ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
@@ -130,7 +114,6 @@ devices.forEach(device => {
       });
     });
 
-    // verify the service and route count in Overview page
     it('should verify the service and route count in Overview page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemsOverview).click();
@@ -140,7 +123,6 @@ devices.forEach(device => {
       cy.get(OverviewPage.routeCount).should('have.text', '1');
     });
 
-    // verify the route is created in Routes page
     it('should verify the route is created in Routes page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemRoutes).click();
@@ -152,25 +134,11 @@ devices.forEach(device => {
       cy.get(RoutesPage.title).should('have.text', 'test-route');
     });
 
-    // verify route via kong admin api
-    it('should verify route created via kong admin api', () => {
-      cy.request({
-        method: 'GET',
-        url: `${Cypress.env('KONG_ADMIN_URL')}/routes`,
-        auth: {
-          type: 'basic',
-          username: 'admin',
-          password: 'admin',
-        },
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.data).to.have.length(1);
-        expect(response.body.data[0].name).to.eq('test-route');
-      });
+    it('should verify route is created status via kong admin api', () => {
+      cy.checkResourceViaApi({ path: '/routes', description: 'route' }, 1);
     });
 
-    // clean up the routes
-    it('should clean up the routes', () => {
+    it('should clean up the routes in Routes page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemRoutes).click();
       ensureSidebarToggleInActive(device);
@@ -181,24 +149,11 @@ devices.forEach(device => {
       cy.get(Layout.modalActionButton).click();
     });
 
-    // verify route is deleted via kong admin api
     it('should verify route is deleted status via kong admin api', () => {
-      cy.request({
-        method: 'GET',
-        url: `${Cypress.env('KONG_ADMIN_URL')}/routes`,
-        auth: {
-          type: 'basic',
-          username: 'admin',
-          password: 'admin',
-        },
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.data).to.have.length(0);
-      });
+      cy.checkResourceViaApi({ path: '/routes', description: 'route' }, 0);
     });
 
-    // clean up services
-    it('should clean up services', () => {
+    it('should clean up services in Gateway Service page', () => {
       ensureSidebarItemVisible(Layout.sidebarItemsOverview, device);
       cy.get(Layout.sidebarItemGatewayServices).click();
       ensureSidebarToggleInActive(device);
@@ -209,15 +164,8 @@ devices.forEach(device => {
       cy.get(Layout.modalActionButton).click();
     });
 
-    // verify service is deleted via kong admin api
     it('should verify service is deleted status via kong admin api', () => {
-      cy.request({
-        method: 'GET',
-        url: `${Cypress.env('KONG_ADMIN_URL')}/services`,
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.data).to.have.length(0);
-      });
+      cy.checkResourceViaApi({ path: '/services', description: 'service' }, 0);
     });
 
   });
