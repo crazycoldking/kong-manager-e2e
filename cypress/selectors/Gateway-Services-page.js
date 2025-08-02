@@ -1,4 +1,5 @@
 export const GatewayServicesPage = {
+    // New Gateway Service
     urlInput: '[data-testid="gateway-service-url-input"]',
     nameInput: '[data-testid="gateway-service-name-input"]',
     viewAdvancedFieldsCollapseTrigger: '[data-testid="advanced-fields-collapse"] > .collapse-heading > .collapse-trigger > [data-testid="collapse-trigger-content"] > [data-testid="collapse-trigger-label"]',
@@ -20,7 +21,12 @@ export const GatewayServicesPage = {
     tagsCollapseTrigger: '[data-testid="tags-collapse"] [data-testid="collapse-trigger-content"]',
     tagsInput: '[data-testid="gateway-service-tags-input"]',
     submitButton: '[data-testid="service-create-form-submit"]',
+    // Service details page
     title: '.title',
+    serviceNameInTable: '[data-testid="name-plain-text"] > .attrs-data-text',
+    serviceHostInTable: '[data-testid="host-plain-text"] > .attrs-data-text',
+    serviceProtocolInTable: '[data-testid="protocol-plain-text"] > .attrs-data-text',
+    serviceIdInTable: '.copy-text',
     viewConfigurationButton: '[data-testid="service-create-form-view-configuration"]',
     configurationTitle: '[data-testid="slideout-title"]',
     closeConfigurationButton: '[data-testid="slideout-close-icon"]',

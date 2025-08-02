@@ -28,3 +28,16 @@ Cypress.Commands.add('checkResourceViaApi', (endpoint, count = 0) => {
     expect(response.body.data).to.have.length(count, `${endpoint.description} should be ${count}`);
   });
 });
+
+Cypress.Commands.add('createService', (serviceName, url) => {
+  cy.request({
+    method: 'POST',
+    url: Cypress.env('KONG_ADMIN_URL') + '/services',
+    body: {
+      name: serviceName,
+      url: url
+    }
+  }).then((response) => {
+    expect(response.status).to.eq(201);
+  });
+});
