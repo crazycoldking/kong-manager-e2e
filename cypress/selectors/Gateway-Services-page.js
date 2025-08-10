@@ -21,6 +21,8 @@ export const GatewayServicesPage = {
     tagsCollapseTrigger: '[data-testid="tags-collapse"] [data-testid="collapse-trigger-content"]',
     tagsInput: '[data-testid="gateway-service-tags-input"]',
     submitButton: '[data-testid="service-create-form-submit"]',
+    invalidURLMessage: '.gateway-service-form-group-fields > div > p',
+
     // Service details page
     title: '.title',
     serviceNameInTable: '[data-testid="name-plain-text"] > .attrs-data-text',

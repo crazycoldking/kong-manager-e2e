@@ -8,13 +8,16 @@ import { Layout } from '../selectors/common/layout';
 devices.forEach(device => {
     describe(`Gateway Service E2E Test on ${device.name}`, () => {
 
-        const serviceName = 'test-service';
-        const url = 'http://example.com';
-
+        // TODO: service name and route name should be generated automatically with pattern to avoid conflict
+        
+        // service name and url should be fetched from fixture file : service_info.json
         before(() => {
             cy.cleanUpRoutesAndServices();
-            // create a service via admin api
-            cy.createService(serviceName, url);
+            // Load fixture inside the before hook
+            cy.fixture('service_info.json').then((serviceData) => {
+                // create a service via admin api
+                cy.createService(serviceData.name, serviceData.url);
+            });
         });
 
         after(() => {

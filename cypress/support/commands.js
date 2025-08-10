@@ -12,6 +12,9 @@ Cypress.Commands.add('cleanUpRoutesAndServices', () => {
         cy.request('DELETE', Cypress.env('KONG_ADMIN_URL') + `/services/${service.name}`);
       });
     });
+
+  // TODO: api call is qucik, data cleanup may not be immediate, need to check and verify status till it is cleaned up
+  
 });
 
 Cypress.Commands.add('checkResourceViaApi', (endpoint, count = 0) => {

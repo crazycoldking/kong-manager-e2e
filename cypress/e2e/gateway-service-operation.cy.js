@@ -72,12 +72,17 @@ devices.forEach(device => {
             cy.get(GatewayServicesPage.submitButton).should('be.disabled');
             // input invalid URL
             cy.get(GatewayServicesPage.urlInput).clear().type('invalid_url');
+            // verify url input has attribute aria-invalid
             cy.get(GatewayServicesPage.urlInput).should('have.attr', 'aria-invalid', 'true');
-            // TODO: verify error message is displayed in page - hard to locate the error message
-
+            // verify error message is displayed in page
+            cy.get(GatewayServicesPage.invalidURLMessage).should('contain.text', 'The URL must follow a valid format.');
             // verify save button is disables
             cy.get(GatewayServicesPage.submitButton).should('be.disabled');
         })
 
     });
+
+    // TODO: add test case for creating service for different protocols(grpc, grpcs, http, https, tcp, tls, tls_passthrough, udp, ws, wss) via fixture files
+
+
 });
